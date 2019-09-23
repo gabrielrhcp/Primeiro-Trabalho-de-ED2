@@ -1,74 +1,104 @@
 from grafo import Grafo
 from algoritmosDeOrdenacao import *
 from utils import *
-
+import datetime
 '''
 Implemente o algoritmo de ordenação no arquivo algoritmosDeOrdenacao.py
 Instruções básicas de como fazer a implementação estão no arquivo algoritmosDeOrdenacao.py
 '''
 
 if __name__ == "__main__":
-    print('[1] 7 vertices\n[2] 100 vertices\n[3] 1000 vertices\n[4] 10000 vertices\n[5] 100000 vertices')
-    ver = int(input('Digite a quantidade de vertices q vc deseja ordenar: '))
-    while ver < 1 or ver > 5:
-        ver = int(input('Digite a quantidade de vertices q vc deseja ordenar: '))
 
-    if ver == 1:
+    ''' trecho original para definições
+    algoritimoDeOrdenacao = InsertionSort()
+    arquivoJson = '../grafos/7vertices.json'
+    '''
+    # trecho alterado para as definições
+
+    '''Apresentção e escolha do numero de vertices - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    Um arquivo de grafos foi definido como padrão para prevenir erros
+    variaveis 'strini' e 'strfin' são usadas para gerar um nome para o arquivo de saida com base no arquivo de entrada
+    elas serão concatenadas
+    '''
+
+    strini = ''
+    strfin = '_Vertices_Output.txt'
+    print("Escolha a quantidade de vertices:\n")
+    ver = input("1 - 7 vertices\n2 - 100 vertices\n3 - 1000 vertices\n4 - 10000 vertices\n5 - 100000 vertices\n")
+
+    if int(ver) == 1:
         arquivoJson = '../grafos/7vertices.json'
-        tam = int(7)
+        strini = '7'
 
-    elif ver == 2:
+    elif int(ver) == 2:
         arquivoJson = '../grafos/100vertices.json'
-        tam = int(100)
+        strini = '100'
 
-    elif ver == 3:
+    elif int(ver) == 3:
         arquivoJson = '../grafos/1000vertices.json'
-        tam = int(1000)
+        strini = '1000'
 
-    elif ver == 4:
+    elif int(ver) == 4:
         arquivoJson = '../grafos/10000vertices.json'
-        tam = int(10000)
+        strini = '10000'
 
-    else:
+    elif int(ver) == 5:
         arquivoJson = '../grafos/100000vertices.json'
-        tam = int(100000)
-
-    print("[1] QuickSort\n[2] MergeSort\n[3] InsertSort\n[4] Quicksort + InsertSort Parcial\n"
-                "[5] Quicksort + InsertSort Final\n[6] MergeSort + InsertSort Parcial\n[7] MergeSort + InsertSort Final\n")
-
-    alg = int(input('Digite qual algoritmo de ordenção usar: '))
-    while alg < 1 or alg > 7:
-        alg = int(input('Digite qual algoritmo de ordenção usar: '))
-
-    if alg == 1:
-        algoritimoDeOrdenacao = QuickSort()
-
-    elif alg == 2:
-        algoritimoDeOrdenacao = MergeSort()
-
-    elif alg == 3:
-        algoritimoDeOrdenacao = InsertSort()
-
-    elif alg == 4:
-        algoritimoDeOrdenacao = QuicksortInsertSortP()
-
-    elif alg == 5:
-        algoritimoDeOrdenacao = QuicksortInsertSortF()
-
-    elif alg == 6:
-        algoritimoDeOrdenacao = MergeSortInsertSortP()
+        strini = '100000'
 
     else:
-        algoritimoDeOrdenacao = MergeSortInsertSortF()
+        # entrada padrão
+        print("Nenhum tamanho de entrada apresentado foi selecionado")
+        print("Neste caso o padrão será 100\n")
+        arquivoJson = '../grafos/100vertices.json'
+        strini = '100'
 
-    arquivoDeSaida = '../arvores_geradas/mst7Vertices.txt'
+    '''
+    Apresentação e escolha do algoritimo de ordenação - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    Um algoritimo foi definido como padrão para não ocasionar erros
+    '''
+
+    print("Escolha o algoritmo de ordenação:\n")
+    alg = input("1 - QuickSort\n2 - MergeSort\n3 - InsertionSort\n4 - QuickSort + InsertionSort Parcial\n"
+                "5 - QuickSort + InsertionSort Final\n6 - MergeSort + InsertionSort Parcial\n7 - MergeSort + InsertionSort Final\n")
+
+    if int(alg) == 1:
+        algoritimoDeOrdenacao = QuickSort()
+    elif int(alg) == 2:
+        algoritimoDeOrdenacao = Mergesort()
+    elif int(alg) == 3:
+        algoritimoDeOrdenacao = InsertionSort()
+    elif int(alg) == 4:
+        algoritimoDeOrdenacao = Mergesort()
+    elif int(alg) == 5:
+        algoritimoDeOrdenacao = QuickSort()
+    elif int(alg) == 6:
+        algoritimoDeOrdenacao = MergesortInsertionSortParcial()
+    elif int(alg) == 7:
+        algoritimoDeOrdenacao = MergesortInsertionSortFinal()
+        '''
+        Shellsort tem duas implementações: uma com uma sequencia para 'h' 
+        já definida e outra para um intervalo 'gap' definido pelo usuario
+        '''
+
+    # elif int(alg) == 4:
+
+    else:
+        # algoritimo padrão
+        print("Nenhum algoritmo apresentado foi selecionado")
+        print("Neste caso será usado o InsertionSort definido como padrão\n")
+        algoritimoDeOrdenacao = InsertionSort()
+
+    arquivoDeSaida = '../arvores_geradas/' + strini + strfin # concatenação das strings para gerar um nome para o arquivo de saida
+
+    print("algoritmo iniciou em: ", datetime.datetime.now())
+    # fim trecho alterado
 
     grafo = Grafo()
     grafo.estabelecerAlgoritmoDeOrdencao(algoritimoDeOrdenacao)
     grafo.carregarGrafo(arquivoJson)
 
-    print(grafo)
-
     arvoreGeradoraMinima = grafo.executarKruskal()
     SalvarArvoreGeradoraMinimaEmArquivo(arquivoDeSaida, arvoreGeradoraMinima)
 
+    print("algoritmo terminou em: ", datetime.datetime.now())
