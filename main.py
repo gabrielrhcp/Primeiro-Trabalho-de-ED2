@@ -1,4 +1,5 @@
 from grafo import Grafo
+import time
 from algoritmosDeOrdenacao import *
 from utils import *
 import datetime
@@ -94,11 +95,14 @@ if __name__ == "__main__":
     print("algoritmo iniciou em: ", datetime.datetime.now())
     # fim trecho alterado
 
+    inicio = time.time()
+
     grafo = Grafo()
     grafo.estabelecerAlgoritmoDeOrdencao(algoritimoDeOrdenacao)
     grafo.carregarGrafo(arquivoJson)
-
     arvoreGeradoraMinima = grafo.executarKruskal()
     SalvarArvoreGeradoraMinimaEmArquivo(arquivoDeSaida, arvoreGeradoraMinima)
 
-    print("algoritmo terminou em: ", datetime.datetime.now())
+    fim = time.time()
+
+    print(fim - inicio)

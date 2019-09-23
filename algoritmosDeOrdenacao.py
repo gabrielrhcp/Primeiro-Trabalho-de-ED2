@@ -32,62 +32,6 @@ class InsertionSort(object):
         print(colecao)
         return colecao
 
-class SelectionSort(object):
-    def ordenar(self, colecao):
-        for i in range(len(colecao) - 1):
-            idx_min = i
-            for j in range(i + 1, len(colecao)):
-                if int(colecao[idx_min]['weight']) > int(colecao[j]['weight']):  # !!!
-                    idx_min = j;
-            if idx_min != i:
-                vaux = colecao[idx_min]
-                colecao[idx_min] = colecao[i]
-                colecao[i] = vaux
-        return colecao
-
-class ShellSort(object):
-    def ordenar(self, colecao):
-        print("Escolha entre os dois metodos:\n")
-        escolha = input("1 - H\n2 - GAP\n")
-        if int(escolha) == 1:
-            h = 1
-            for h in range(h, len(colecao), (3 * h) - 1):
-                h = int(h)
-            while h > 0:
-                h = math.ceil((h - 1) / 3)
-                for i in range(h, len(colecao)):
-                    aux = colecao[i]
-                    j = i
-                    while j >= h and int(colecao[j - h]['weight']) > int(aux['weight']):
-                        colecao[j] = colecao[j - h]
-                        j = j - h
-                        if j < h:
-                            break
-                    colecao[j] = aux
-            return colecao
-        elif int(escolha) == 2:
-            # caso seja escolhido o GAP o usuario escolhe uma distancia que será descrementada
-            distancia = input("Indique a distancia inicial:\n")
-            if int(distancia) > len(colecao):
-                print("distancia maior que o tamanho da coleção\n")
-                print("Neste caso distancia por padrão será metade do tamanho da coleção\n")
-                distancia = len(colecao) / 2
-            gap = int(distancia)
-            while gap > 0:
-                for i in range(gap, len(colecao)):
-                    aux = colecao[i]
-                    j = i
-                    while j >= gap and int(colecao[j - gap]['weight']) > int(aux['weight']):
-                        colecao[j] = colecao[j - gap]
-                        j -= gap
-
-                    colecao[j] = aux
-                gap -= 1
-            return colecao
-        else:
-            print("Nenhum metodo selecionado")
-            return None
-
 class QuickSort(object):
     def particaoR(self, colecao, ini, fin):
         i = int(ini)
@@ -203,6 +147,32 @@ class QuickSort(object):
 
 class MergesortInsertionSortParcial(object):
 
+    def shell(self, colecao):
+        h = 1
+        n = len(colecao)
+        while h > 0:
+            for i in range(h, n):
+                c = colecao[i]
+                j = i
+                while j >= h and int(c["weight"]) < int(colecao[j - h]["weight"]):
+                    colecao[j] = colecao[j - h]
+                    j = j - h
+                    colecao[j] = c
+            h = int(h / 2.2)
+        return colecao
+
+    def select(self, colecao):
+        for i in range(len(colecao) - 1):
+            idx_min = i
+            for j in range(i + 1, len(colecao)):
+                if int(colecao[idx_min]['weight']) > int(colecao[j]['weight']):  # !!!
+                    idx_min = j;
+            if idx_min != i:
+                vaux = colecao[idx_min]
+                colecao[idx_min] = colecao[i]
+                colecao[i] = vaux
+        return colecao
+
     def insertion(self, colecao):
         for i in range(1, len(colecao)):
             chave = colecao[i]
@@ -212,13 +182,13 @@ class MergesortInsertionSortParcial(object):
                 k -= 1
             colecao[k] = chave
 
-    def merge_sort(self, colecao, L):
+    def merge_sort(self, colecao, L, x):
         if len(colecao) > L:
             meio = int(len(colecao) / 2)
             esqpart = colecao[:meio]  # cortando colecao no meio e atribuindo a primeira metada a esqpart
             dirpart = colecao[meio:]  # segunda metade a dirpart
-            self.merge_sort(esqpart, L)
-            self.merge_sort(dirpart, L)
+            self.merge_sort(esqpart, L, x)
+            self.merge_sort(dirpart, L, x)
             i = 0  # indice inicial esqpart
             j = 0  # indice inicial dirpart
             k = 0  # indice inicial da colecao
@@ -240,14 +210,20 @@ class MergesortInsertionSortParcial(object):
                 j += 1
                 k += 1
         else:
-            self.insertion(colecao)
+            if x == 1:
+                self.insertion(colecao)
+            elif x == 2:
+                self.select(colecao)
+            else:
+                self.shell(colecao)
 
         return colecao
 
     def ordenar(self, colecao):
         print(f'{colecao}')
         L = int(input('Digite L: '))
-        self.merge_sort(colecao, L)
+        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        self.merge_sort(colecao, L, x)
         print(f'{colecao}')
         return colecao
 
@@ -287,62 +263,33 @@ class Mergesort(object):
         print(colecao)
         return colecao
 
-class HeapSort(object):
-    def heapfy(self, colecao, n, r):
-        maior = r
-        esq = 2 * r + 1
-        dir = 2 * r + 2
-        if esq < n and int(colecao[r]['weight']) < int(colecao[esq]['weight']):
-            maior = esq
-        if dir < n and int(colecao[maior]['weight']) < int(colecao[dir]['weight']):
-            maior = dir
-        if maior != r:
-            colecao[r], colecao[maior] = colecao[maior], colecao[r]
-            self.heapfy(colecao, n, maior)
+class MergesortInsertionSortFinal(object):
 
-    def heapsort(self, colecao):
+    def shell(self, colecao):
+        h = 1
         n = len(colecao)
-        for i in range(n, -1, -1):
-            self.heapfy(colecao, n, i)
-        for i in range(n-1, 0, -1):
-            colecao[i], colecao[0] = colecao[0], colecao[i]
-            self.heapfy(colecao, i, 0)
+        while h > 0:
+            for i in range(h, n):
+                c = colecao[i]
+                j = i
+                while j >= h and int(c["weight"]) < int(colecao[j - h]["weight"]):
+                    colecao[j] = colecao[j - h]
+                    j = j - h
+                    colecao[j] = c
+            h = int(h / 2.2)
         return colecao
 
-    def ordenar(self, colecao):
-        return self.heapsort(colecao)
-
-class CountSort(object):
-    def maxval(self, colecao):
-        max = colecao[0]
+    def select(self, colecao):
         for i in range(len(colecao) - 1):
-            if int(colecao[i]['weight']) > int(max['weight']):
-                max = colecao[i]
-        return max
-
-    def ordenar(self, colecao):
-        max = self.maxval(colecao)
-        maxvalue = int(max['weight']) + 1
-        count = [0] * maxvalue
-        result = [None] * len(colecao)
-        i = 0
-        while i < len(colecao) - 1:
-            count[int(colecao[i]['weight'])] = count[int(colecao[i]['weight'])] + 1
-            i += 1
-        for j in range(1, int(maxvalue)):
-            count[j] = count[j] + count[j - 1]
-        k = len(colecao) - 1
-        while k > 0:
-            result[count[int(colecao[k]['weight'])]] = colecao[k]
-            count[int(colecao[k]['weight'])] -= 1
-            k -= 1
-        outcome = []
-        for a in range(len(result) - 1):
-            if result[a] != None:
-                outcome.append(result[a])
-        return outcome
-
-class MergesortInsertionSortFinal(object):
+            idx_min = i
+            for j in range(i + 1, len(colecao)):
+                if int(colecao[idx_min]['weight']) > int(colecao[j]['weight']):  # !!!
+                    idx_min = j;
+            if idx_min != i:
+                vaux = colecao[idx_min]
+                colecao[idx_min] = colecao[i]
+                colecao[i] = vaux
+        return colecao
 
     def insertion(self, colecao):
         for i in range(1, len(colecao)):
@@ -383,15 +330,47 @@ class MergesortInsertionSortFinal(object):
         return colecao
 
     def ordenar(self, colecao):
-        print(f'{colecao}')
+        print(colecao)
         L = int(input('Digite L: '))
         self.merge_sort(colecao, L)
-        print(f'{colecao}')
-        self.insertion(colecao)
-        print(f'{colecao}')
+        print(colecao)
+        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        if x == 1:
+            self.insertion(colecao)
+        elif x == 2:
+            self.select(colecao)
+        else:
+            self.shell(colecao)
+        print(colecao)
         return colecao
 
 class QuickSortInsertionSortParcial(object):
+
+    def shell(self, colecao):
+        h = 1
+        n = len(colecao)
+        while h > 0:
+            for i in range(h, n):
+                c = colecao[i]
+                j = i
+                while j >= h and int(c["weight"]) < int(colecao[j - h]["weight"]):
+                    colecao[j] = colecao[j - h]
+                    j = j - h
+                    colecao[j] = c
+            h = int(h / 2.2)
+        return colecao
+
+    def select(self, colecao):
+        for i in range(len(colecao) - 1):
+            idx_min = i
+            for j in range(i + 1, len(colecao)):
+                if int(colecao[idx_min]['weight']) > int(colecao[j]['weight']):  # !!!
+                    idx_min = j;
+            if idx_min != i:
+                vaux = colecao[idx_min]
+                colecao[idx_min] = colecao[i]
+                colecao[i] = vaux
+        return colecao
 
     def insertion(self, colecao):
         for i in range(1, len(colecao)):
@@ -402,7 +381,7 @@ class QuickSortInsertionSortParcial(object):
                 k -= 1
             colecao[k] = chave
 
-    def quick(self, colecao, l, r, L):
+    def quick(self, colecao, l, r, L, x):
         i = l
         j = r
         p = colecao[l + (r - l) // 2]
@@ -418,25 +397,62 @@ class QuickSortInsertionSortParcial(object):
                 j -= 1
 
         if L < j-l+1:  # sort left list
-            self.quick(colecao, l, j, L)
+            self.quick(colecao, l, j, L, x)
         else:
-            self.insertion(colecao)
+            if x == 1:
+                self.insertion(colecao)
+            elif x == 2:
+                self.select(colecao)
+            else:
+                self.shell(colecao)
 
         if L < r-i+1:  # sort right list
-            self.quick(colecao, i, r, L)
+            self.quick(colecao, i, r, L, x)
         else:
-            self.insertion(colecao)
+            if x == 1:
+                self.insertion(colecao)
+            elif x == 2:
+                self.select(colecao)
+            else:
+                self.shell(colecao)
         return colecao
 
     def ordenar(self, colecao):
         print(colecao)
         L = int(input('Digite L: '))
-        self.quick(colecao, 0, len(colecao)-1, L)
+        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        self.quick(colecao, 0, len(colecao)-1, L, x)
         print(colecao)
         return colecao
 
 
 class QuickSortInsertionSortFinal(object):
+
+    def shell(self, colecao):
+        h = 1
+        n = len(colecao)
+        while h > 0:
+            for i in range(h, n):
+                c = colecao[i]
+                j = i
+                while j >= h and int(c["weight"]) < int(colecao[j - h]["weight"]):
+                    colecao[j] = colecao[j - h]
+                    j = j - h
+                    colecao[j] = c
+            h = int(h / 2.2)
+        return colecao
+
+    def select(self, colecao):
+        for i in range(len(colecao) - 1):
+            idx_min = i
+            for j in range(i + 1, len(colecao)):
+                if int(colecao[idx_min]['weight']) > int(colecao[j]['weight']):  # !!!
+                    idx_min = j;
+            if idx_min != i:
+                vaux = colecao[idx_min]
+                colecao[idx_min] = colecao[i]
+                colecao[i] = vaux
+        return colecao
 
     def insertion(self, colecao):
         for i in range(1, len(colecao)):
@@ -475,6 +491,12 @@ class QuickSortInsertionSortFinal(object):
         L = int(input('Digite L: '))
         self.quick(colecao, 0, len(colecao) - 1, L)
         print(colecao)
-        self.insertion(colecao)
+        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        if x == 1:
+            self.insertion(colecao)
+        elif x == 2:
+            self.select(colecao)
+        else:
+            self.shell(colecao)
         print(colecao)
         return colecao
