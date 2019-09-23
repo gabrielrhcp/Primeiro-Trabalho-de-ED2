@@ -69,9 +69,9 @@ if __name__ == "__main__":
     elif int(alg) == 3:
         algoritimoDeOrdenacao = InsertionSort()
     elif int(alg) == 4:
-        algoritimoDeOrdenacao = Mergesort()
+        algoritimoDeOrdenacao = QuickSortInsertionSortParcial()
     elif int(alg) == 5:
-        algoritimoDeOrdenacao = QuickSort()
+        algoritimoDeOrdenacao = QuickSortInsertionSortFinal()
     elif int(alg) == 6:
         algoritimoDeOrdenacao = MergesortInsertionSortParcial()
     elif int(alg) == 7:

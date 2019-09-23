@@ -390,3 +390,91 @@ class MergesortInsertionSortFinal(object):
         self.insertion(colecao)
         print(f'{colecao}')
         return colecao
+
+class QuickSortInsertionSortParcial(object):
+
+    def insertion(self, colecao):
+        for i in range(1, len(colecao)):
+            chave = colecao[i]
+            k = i
+            while k > 0 and int(chave['weight']) < int(colecao[k - 1]['weight']):
+                colecao[k] = colecao[k - 1]
+                k -= 1
+            colecao[k] = chave
+
+    def quick(self, colecao, l, r, L):
+        i = l
+        j = r
+        p = colecao[l + (r - l) // 2]
+        while i <= j:
+            while int(colecao[i]['weight']) < int(p['weight']) :
+                i += 1
+            while int(colecao[j]['weight']) > int(p['weight']) :
+                j -= 1
+
+            if i <= j:
+                colecao[i], colecao[j] = colecao[j], colecao[i]
+                i += 1
+                j -= 1
+
+        if L < j-l+1:  # sort left list
+            self.quick(colecao, l, j, L)
+        else:
+            self.insertion(colecao)
+
+        if L < r-i+1:  # sort right list
+            self.quick(colecao, i, r, L)
+        else:
+            self.insertion(colecao)
+        return colecao
+
+    def ordenar(self, colecao):
+        print(colecao)
+        L = int(input('Digite L: '))
+        self.quick(colecao, 0, len(colecao)-1, L)
+        print(colecao)
+        return colecao
+
+
+class QuickSortInsertionSortFinal(object):
+
+    def insertion(self, colecao):
+        for i in range(1, len(colecao)):
+            chave = colecao[i]
+            k = i
+            while k > 0 and int(chave['weight']) < int(colecao[k - 1]['weight']):
+                colecao[k] = colecao[k - 1]
+                k -= 1
+            colecao[k] = chave
+
+    def quick(self, colecao, l, r, L):
+        i = l
+        j = r
+        p = colecao[l + (r - l) // 2]
+        while i <= j:
+            while int(colecao[i]['weight']) < int(p['weight']):
+                i += 1
+            while int(colecao[j]['weight']) > int(p['weight']):
+                j -= 1
+
+            if i <= j:
+                colecao[i], colecao[j] = colecao[j], colecao[i]
+                i += 1
+                j -= 1
+
+        if L < j - l + 1:  # sort left list
+            self.quick(colecao, l, j, L)
+
+        if L < r - i + 1:  # sort right list
+            self.quick(colecao, i, r, L)
+
+        return colecao
+
+    def ordenar(self, colecao):
+        print(colecao)
+        L = int(input('Digite L: '))
+        self.quick(colecao, 0, len(colecao) - 1, L)
+        print(colecao)
+        self.insertion(colecao)
+        print(colecao)
+        return colecao
