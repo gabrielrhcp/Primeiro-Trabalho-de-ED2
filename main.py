@@ -25,7 +25,7 @@ if __name__ == "__main__":
     strini = ''
     strfin = '_Vertices_Output.txt'
     print("Escolha a quantidade de vertices:\n")
-    ver = input("1 - 7 vertices\n2 - 100 vertices\n3 - 1000 vertices\n4 - 10000 vertices\n5 - 100000 vertices\n")
+    ver = input("[1] 7 vertices\n[2] 100 vertices\n[3] 1000 vertices\n[4] 10000 vertices\n[5] 100000 vertices\nDigite qual o tamanho: ")
 
     if int(ver) == 1:
         arquivoJson = '../grafos/7vertices.json'
@@ -60,8 +60,8 @@ if __name__ == "__main__":
     '''
 
     print("Escolha o algoritmo de ordenação:\n")
-    alg = input("1 - QuickSort\n2 - MergeSort\n3 - InsertionSort\n4 - QuickSort + InsertionSort Parcial\n"
-                "5 - QuickSort + InsertionSort Final\n6 - MergeSort + InsertionSort Parcial\n7 - MergeSort + InsertionSort Final\n")
+    alg = input("[1] QuickSort\n[2] MergeSort\n[3] InsertionSort\n[4] QuickSort + InsertionSort Parcial\n"
+                "[5] QuickSort + InsertionSort Final\n[6] MergeSort + InsertionSort Parcial\n[7] MergeSort + InsertionSort Final\nDigite qual algoritmo usar: ")
 
     if int(alg) == 1:
         algoritimoDeOrdenacao = QuickSort()
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     print("algoritmo iniciou em: ", datetime.datetime.now())
     # fim trecho alterado
 
-    inicio = time.time()
+    #inicio = time.time()
 
     grafo = Grafo()
     grafo.estabelecerAlgoritmoDeOrdencao(algoritimoDeOrdenacao)
@@ -103,6 +103,6 @@ if __name__ == "__main__":
     arvoreGeradoraMinima = grafo.executarKruskal()
     SalvarArvoreGeradoraMinimaEmArquivo(arquivoDeSaida, arvoreGeradoraMinima)
 
-    fim = time.time()
+    #fim = time.time()
 
-    print(fim - inicio)
+    #print(fim - inicio)

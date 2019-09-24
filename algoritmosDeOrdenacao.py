@@ -1,4 +1,5 @@
 import math
+import time
 '''
 Introdução:
 - Implementar algoritmo de ordenação que receba uma colecão
@@ -21,6 +22,8 @@ int(colecao[i]['weight']) < int(colecao[j]['weight'])
 # Sua classe algoritmo de ordenação precisar ter um método ordenar
 class InsertionSort(object):
     def ordenar(self, colecao):
+        inicio = float(time.time())
+
         print(colecao)
         for i in range(1, len(colecao)):
             chave = colecao[i]
@@ -30,120 +33,45 @@ class InsertionSort(object):
                 k -= 1
             colecao[k] = chave
         print(colecao)
+        fim = float(time.time())
+
+        print(fim-inicio)
         return colecao
 
 class QuickSort(object):
-    def particaoR(self, colecao, ini, fin):
-        i = int(ini)
-        k = int(fin) - 1
-        pivo = colecao[fin]
-        concluido = False  # muda de estado quando i e f (k) se cruzam
-        while not concluido:
-            while i < k and int(colecao[i]['weight']) <= int(pivo['weight']):
+    def quick(self, colecao, l, r):
+        i = l
+        j = r
+        p = colecao[l + (r - l) // 2]
+        while i <= j:
+            while int(colecao[i]['weight']) < int(p['weight']):
                 i += 1
-            while int(colecao[k]['weight']) >= int(pivo['weight']) and k >= i:
-                k -= 1
-            if k < i:
-                concluido = True
-            else:
-                temp = colecao[i]
-                colecao[i] = colecao[k]
-                colecao[k] = temp
-                k -= 1
+            while int(colecao[j]['weight']) > int(p['weight']):
+                j -= 1
+
+            if i <= j:
+                colecao[i], colecao[j] = colecao[j], colecao[i]
                 i += 1
-        temp = colecao[fin]
-        colecao[fin] = colecao[i]
-        colecao[i] = temp
-        return i
+                j -= 1
 
-    def particaoL(self, colecao, ini, fin):
-        i = int(ini) + 1
-        k = int(fin)
-        pivo = colecao[ini]
-        concluido = False
-        while not concluido:
-            while i < k and int(colecao[i]['weight']) <= int(pivo['weight']):
-                i += 1
-            while int(colecao[k]['weight']) >= int(pivo['weight']) and k >= i:
-                k -= 1
-            if k < i:
-                concluido = True
-            else:
-                temp = colecao[i]
-                colecao[i] = colecao[k]
-                colecao[k] = temp
-                k -= 1
-                i += 1
-        temp = colecao[ini]
-        colecao[ini] = colecao[k]
-        colecao[k] = temp
-        return k
+        if l < j:
+            self.quick(colecao, l, j)
 
-    def particaoM(self, colecao, ini, fin):
-        meio = int((fin + ini)/2)
-        i = int(colecao[ini]['weight'])
-        m = int(colecao[meio]['weight'])
-        f = int(colecao[fin]['weight'])
+        if i < r:
+            self.quick(colecao, i, r)
 
-        idxm = 0 # indice do mediano
-        if i < m:
-            if m < f:
-                idxm = meio
-            else:
-                if i < f:
-                    idxm = fin
-                else:
-                    idxm = ini
-        else:
-            if f < m:
-                idxm = meio
-            else:
-                if f < i:
-                    idxm = fin
-                else:
-                    idxm = ini
-        aux = colecao[idxm]
-        colecao[idxm] = colecao[fin]
-        colecao[fin] = aux
-        return self.particaoR(colecao, ini, fin)
-
-    def quickSortR(self, colecao, ini, fin):
-        if int(ini) < int(fin):
-            par = self.particaoR(colecao, ini, fin)
-            self.quickSortR(colecao, ini, par - 1)
-            self.quickSortR(colecao, par + 1, fin)
-            return colecao
-
-    def quickSortL(self, colecao, ini, fin):
-        if int(ini) < int(fin):
-            par = self.particaoL(colecao, ini, fin)
-            self.quickSortL(colecao, ini, par - 1)
-            self.quickSortL(colecao, par + 1, fin)
-            return colecao
-
-    def quickSortM(self, colecao, ini, fin):
-        if int(ini) < int(fin):
-            par = self.particaoM(colecao, ini, fin)
-            self.quickSortM(colecao, ini, par - 1)
-            self.quickSortM(colecao, par + 1, fin)
-            return colecao
+        return colecao
 
     def ordenar(self, colecao):
         print(colecao)
-        print("Escolha o pivô:")
-        escolha = input("1 - pivô a direita\n2 - pivô a esquerda\n3 - pivô mediano\n")
-        if int(escolha) == 1:
-            self.quickSortR(colecao, 0, len(colecao) - 1)
-            print(colecao)
-            return colecao
-        if int(escolha) == 2:
-            self.quickSortL(colecao, 0, len(colecao) - 1)
-            print(colecao)
-            return colecao
-        if int(escolha) == 3:
-            self.quickSortM(colecao, 0, len(colecao) - 1)
-            print(colecao)
-            return colecao
+        inicio = float(time.time())
+
+        self.quick(colecao, 0, len(colecao) - 1)
+        print(colecao)
+        fim = float(time.time())
+
+        print(fim - inicio)
+        return colecao
 
 class MergesortInsertionSortParcial(object):
 
@@ -223,8 +151,13 @@ class MergesortInsertionSortParcial(object):
         print(f'{colecao}')
         L = int(input('Digite L: '))
         x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        inicio = float(time.time())
+
         self.merge_sort(colecao, L, x)
         print(f'{colecao}')
+        fim = float(time.time())
+
+        print(fim - inicio)
         return colecao
 
 class Mergesort(object):
@@ -259,8 +192,13 @@ class Mergesort(object):
 
     def ordenar(self, colecao):
         print(colecao)
+        inicio = float(time.time())
+
         self.merge_sort(colecao)
         print(colecao)
+        fim = float(time.time())
+
+        print(fim - inicio)
         return colecao
 
 class MergesortInsertionSortFinal(object):
@@ -332,9 +270,11 @@ class MergesortInsertionSortFinal(object):
     def ordenar(self, colecao):
         print(colecao)
         L = int(input('Digite L: '))
+        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        inicio = float(time.time())
+
         self.merge_sort(colecao, L)
         print(colecao)
-        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
         if x == 1:
             self.insertion(colecao)
         elif x == 2:
@@ -342,6 +282,9 @@ class MergesortInsertionSortFinal(object):
         else:
             self.shell(colecao)
         print(colecao)
+        fim = float(time.time())
+
+        print(fim - inicio)
         return colecao
 
 class QuickSortInsertionSortParcial(object):
@@ -421,8 +364,13 @@ class QuickSortInsertionSortParcial(object):
         print(colecao)
         L = int(input('Digite L: '))
         x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        inicio = float(time.time())
+
         self.quick(colecao, 0, len(colecao)-1, L, x)
         print(colecao)
+        fim = float(time.time())
+
+        print(fim - inicio)
         return colecao
 
 
@@ -489,9 +437,11 @@ class QuickSortInsertionSortFinal(object):
     def ordenar(self, colecao):
         print(colecao)
         L = int(input('Digite L: '))
+        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
+        inicio = float(time.time())
+
         self.quick(colecao, 0, len(colecao) - 1, L)
         print(colecao)
-        x = int(input('[1] Insertion\n[2] Selection\n[3] Shell\nDigite por qual ordenar: '))
         if x == 1:
             self.insertion(colecao)
         elif x == 2:
@@ -499,4 +449,7 @@ class QuickSortInsertionSortFinal(object):
         else:
             self.shell(colecao)
         print(colecao)
+        fim = float(time.time())
+
+        print(fim - inicio)
         return colecao
