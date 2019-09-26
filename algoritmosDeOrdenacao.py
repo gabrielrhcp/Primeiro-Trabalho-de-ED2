@@ -5,16 +5,13 @@ Introdução:
 - Implementar algoritmo de ordenação que receba uma colecão
 - A coleção é uma lista de arestas
 - Para comparar o peso as arestas entre dois item da coleção basta usar a chave 'weight' (peso)
-
 Exemplos:
 - Modo convencional
 colecao[i] operador de comparacao colecao[j]
 colecao[i] < colecao[j]
-
 - Modo que você vai usar
 int(colecao[i]['weight']) operador de comparacao int(colecao[j]['weight'])
 int(colecao[i]['weight']) < int(colecao[j]['weight'])
-
 É nescessário converter o valor pra Interger no momento da comparação a fim de evitar erros
 '''
 
@@ -328,37 +325,39 @@ class QuickSortInsertionSortParcial(object):
         i = l
         j = r
         p = colecao[l + (r - l) // 2]
-        while i <= j:
-            while int(colecao[i]['weight']) < int(p['weight']) :
-                i += 1
-            while int(colecao[j]['weight']) > int(p['weight']) :
-                j -= 1
+        if L < r-l+1:
+            while i <= j:
+                while int(colecao[i]['weight']) < int(p['weight']) :
+                    i += 1
+                while int(colecao[j]['weight']) > int(p['weight']) :
+                    j -= 1
 
-            if i <= j:
-                colecao[i], colecao[j] = colecao[j], colecao[i]
-                i += 1
-                j -= 1
+                if i <= j:
+                    colecao[i], colecao[j] = colecao[j], colecao[i]
+                    i += 1
+                    j -= 1
 
-        if L < j-l+1:  # sort left list
-            self.quick(colecao, l, j, L, x)
+            if l < j:
+                self.quick(colecao, l, j, L, x)
+
+            if i < r:
+                self.quick(colecao, i, r, L, x)
+
         else:
+            aux = colecao[l:r]
             if x == 1:
-                self.insertion(colecao)
+                self.insertion(aux)
             elif x == 2:
-                self.select(colecao)
+                self.select(aux)
             else:
-                self.shell(colecao)
+                self.shell(aux)
+            i = 0
+            for x in range(l,r):
+                colecao[x] = aux[i]
+                i += 1
 
-        if L < r-i+1:  # sort right list
-            self.quick(colecao, i, r, L, x)
-        else:
-            if x == 1:
-                self.insertion(colecao)
-            elif x == 2:
-                self.select(colecao)
-            else:
-                self.shell(colecao)
         return colecao
+
 
     def ordenar(self, colecao):
         print(colecao)
