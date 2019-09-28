@@ -3,6 +3,7 @@ import time
 from algoritmosDeOrdenacao import *
 from utils import *
 import datetime
+
 '''
 Implemente o algoritmo de ordenação no arquivo algoritmosDeOrdenacao.py
 Instruções básicas de como fazer a implementação estão no arquivo algoritmosDeOrdenacao.py
